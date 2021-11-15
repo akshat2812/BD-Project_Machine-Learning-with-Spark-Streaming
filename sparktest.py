@@ -30,7 +30,7 @@ def convert_json2df(rdd, col):
     df.show()
 
 lines = lines.flatMap(lambda x: check_json(x,columns))
-lines = lines.flatMap(lambda x: convert_json2df(x,cols))
+lines = lines.flatMap(lambda x: convert_json2df(x,columns))
 
 #dict_df = json.load(lines)
 #dict_df.pprint()
