@@ -17,12 +17,11 @@ ss=SparkSession(sc)
   #tp.StructField(name= 'label',       dataType= tp.IntegerType(),  nullable= True),
   #tp.StructField(name= 'tweet',       dataType= tp.StringType(),   nullable= True)
   
-#data=ss.read.csv('/home/pes2ug19cs028/BigData/MLSS/train.csv',header=True,inferSchema=True)
-#data.printSchema()
-#data.show(5)
+
 
 ssc=StreamingContext(sc,batchDuration=2)
 lines=ssc.socketTextStream('localhost',6100)
+words=lines.flatMap(lambda x: x.split(','))
 if lines:
 	lines.foreachRDD(lambda x: print(x))
 ssc.start()
