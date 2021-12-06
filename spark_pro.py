@@ -5,10 +5,10 @@ from pyspark.streaming import StreamingContext
 import json
 #import pyspark.sql.types as tp
 #from pyspark.ml import Pipeline
-#from pyspark.ml.feature import StringIndexer, OneHotEncoderEstimator, VectorAssembler
-#from pyspark.ml.feature import StopWordsRemover, Word2Vec, RegexTokenizer
-#from pyspark.ml.classification import LogisticRegression
-#from pyspark.sql import Row
+from pyspark.ml.feature import StringIndexer, OneHotEncoderEstimator, VectorAssembler
+from pyspark.ml.feature import StopWordsRemover, Word2Vec, RegexTokenizer
+from pyspark.ml.classification import LogisticRegression
+
 
 sc=SparkContext('local[2]',appName="crime")
 ss=SparkSession(sc)
@@ -30,8 +30,8 @@ def rddtoDf(rdd):
         df_copy=df
         df_copy=df_copy.drop('feature0','feature6')
         df_copy.show()
-  
-  
+        
+   
 
 lines.foreachRDD(lambda x:rddtoDf(x))
 
