@@ -1,11 +1,12 @@
 import pyspark
+import np
 from pyspark import SparkContext
 from pyspark.sql.session import SparkSession
 from pyspark.streaming import StreamingContext
 import json
 #import pyspark.sql.types as tp
 #from pyspark.ml import Pipeline
-from pyspark.ml.feature import StringIndexer, OneHotEncoderEstimator, VectorAssembler
+from pyspark.ml.feature import LabelEncoder
 from pyspark.ml.feature import StopWordsRemover, Word2Vec, RegexTokenizer
 from pyspark.ml.classification import LogisticRegression
 
@@ -19,7 +20,11 @@ lines=ssc.socketTextStream('localhost',6100)
 
 my_schema=["feature0","feature1","feature2","feature3","feature4","feature5","feature6","feature7","feature8"]
 
-
+def label_encoder(df_copy):
+    le = LabelEncoder()
+    y = le.fit_transform(np.array(df.select('feature2').collect()))
+    # print(y)
+    tokenizer(df, y)
     
 def rddtoDf(rdd):
     x = rdd.collect()
