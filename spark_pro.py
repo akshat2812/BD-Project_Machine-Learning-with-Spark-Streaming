@@ -35,9 +35,14 @@ def tokenizer(df, y):
     feature7 = RegexTokenizer(inputCol="feature7", outputCol='tokens7', pattern='\\W')
     feature8 = RegexTokenizer(inputCol="feature8", outputCol='tokens8', pattern='\\W')
     
-    tk0 = feature0.transform(df).select('tokens0')
     tk1 = feature1.transform(df).select('tokens1')
-    stop_words_remover(tk0, tk1, y)
+    tk2 = feature2.transform(df).select('tokens2')
+    tk3 = feature3.transform(df).select('tokens3')
+    tk4 = feature4.transform(df).select('tokens4')
+    tk5 = feature5.transform(df).select('tokens5')
+    tk7 = feature7.transform(df).select('tokens7')
+    tk8 = feature8.transform(df).select('tokens8')
+    stop_words_remover(tk1, tk2,tk3,tk4,tk5,tk7,tk8, y)
 
 
 def stop_words_remover(col1, col2, y):
