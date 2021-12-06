@@ -2,6 +2,7 @@ import pyspark
 from pyspark import SparkContext
 from pyspark.sql.session import SparkSession
 from pyspark.streaming import StreamingContext
+import json
 #import pyspark.sql.types as tp
 #from pyspark.ml import Pipeline
 #from pyspark.ml.feature import StringIndexer, OneHotEncoderEstimator, VectorAssembler
@@ -12,18 +13,27 @@ from pyspark.streaming import StreamingContext
 sc=SparkContext('local[2]',appName="crime")
 ss=SparkSession(sc)
 
-#my_schema=tp.StructType([
-  #tp.StructField(name= 'Dates',       dataType= tp.IntegerType(),  nullable= True),
-  #tp.StructField(name= 'label',       dataType= tp.IntegerType(),  nullable= True),
-  #tp.StructField(name= 'tweet',       dataType= tp.StringType(),   nullable= True)
-  
-
 
 ssc=StreamingContext(sc,batchDuration=2)
 lines=ssc.socketTextStream('localhost',6100)
-words=lines.flatMap(lambda x: x.split(','))
-if lines:
-	lines.foreachRDD(lambda x: print(x))
+
+my_schema=["feature0","feature1","feature2","feature3","feature4","feature5","feature6","feature7","feature8"]
+
+
+    
+def rddtoDf(rdd):
+    x = rdd.collect()
+    if len(x) > 0:
+        y = json.loads(x[0])
+        z = y.values()
+        df=ss.createDataFrame(data=z,schema=my_schema)
+        df_copy=df
+        df_copy=df_copy.drop(['feature0'])
+        df.show()    
+  
+
+lines.foreachRDD(lambda x:rddtoDf(x))
+
 ssc.start()
 ssc.awaitTermination()
 ssc.stop()
