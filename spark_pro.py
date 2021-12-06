@@ -28,8 +28,9 @@ def rddtoDf(rdd):
         z = y.values()
         df=ss.createDataFrame(data=z,schema=my_schema)
         df_copy=df
-        df_copy=df_copy.drop(['feature0'])
-        df.show()    
+        df_copy=df_copy.drop('feature0','feature6')
+        df_copy.show()
+  
   
 
 lines.foreachRDD(lambda x:rddtoDf(x))
