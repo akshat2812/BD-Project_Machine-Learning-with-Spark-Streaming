@@ -22,9 +22,31 @@ my_schema=["feature0","feature1","feature2","feature3","feature4","feature5","fe
 
 def label_encoder(df_copy):
     le = LabelEncoder()
-    y = le.fit_transform(np.array(df.select('feature2').collect()))
+    y = le.fit_transform(np.array(df_copy.select('feature2').collect()))
     # print(y)
-    tokenizer(df, y)
+    tokenizer(df_copy, y)
+    
+def tokenizer(df, y):
+    feature1 = RegexTokenizer(inputCol="feature1", outputCol='tokens1', pattern='\\W')
+    feature2 = RegexTokenizer(inputCol="feature2", outputCol='tokens2', pattern='\\W')
+    feature3 = RegexTokenizer(inputCol="feature3", outputCol='tokens3', pattern='\\W')
+    feature4 = RegexTokenizer(inputCol="feature4", outputCol='tokens4', pattern='\\W')
+    feature5 = RegexTokenizer(inputCol="feature5", outputCol='tokens5', pattern='\\W')
+    feature7 = RegexTokenizer(inputCol="feature7", outputCol='tokens7', pattern='\\W')
+    feature8 = RegexTokenizer(inputCol="feature8", outputCol='tokens8', pattern='\\W')
+    
+    tk0 = feature0.transform(df).select('tokens0')
+    tk1 = feature1.transform(df).select('tokens1')
+    stop_words_remover(tk0, tk1, y)
+
+
+def stop_words_remover(col1, col2, y):
+    feature0 = StopWordsRemover(inputCol='tokens0', outputCol='filtered_words0')
+    feature1 = StopWordsRemover(inputCol='tokens1', outputCol='filtered_words1')
+    swr0 = feature0.transform(col1).select('filtered_words0')
+    swr1 = feature1.transform(col2).select('filtered_words1')
+    # word2vec(swr0, swr1, y)
+    hash_vectoriser(swr0, swr1, y)
     
 def rddtoDf(rdd):
     x = rdd.collect()
